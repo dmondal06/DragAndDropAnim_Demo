@@ -134,6 +134,7 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                         ),
                     contentAlignment = Alignment.Center
                 ) {
+
                     this@Row.AnimatedVisibility(
                         visible = index == dragBoxIndex,
                         enter = scaleIn() + fadeIn(),
