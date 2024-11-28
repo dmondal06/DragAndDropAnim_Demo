@@ -33,7 +33,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -48,13 +47,8 @@ import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.draganddrop.mimeTypes
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-
-//private val rotation = FloatPropKey()
-
 
 @Composable
 fun DragAndDropBoxes(modifier: Modifier = Modifier) {
@@ -80,9 +74,7 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                         .border(1.dp, Color.Black)
                         .dragAndDropTarget(
                             shouldStartDragAndDrop = { event ->
-                                event
-                                    .mimeTypes()
-                                    .contains(ClipDescription.MIMETYPE_TEXT_PLAIN)
+                                event.mimeTypes().contains(ClipDescription.MIMETYPE_TEXT_PLAIN)
                             },
                             target = remember {
                                 object : DragAndDropTarget {
@@ -101,12 +93,9 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                         enter = scaleIn() + fadeIn(),
                         exit = scaleOut() + fadeOut()
                     ) {
-                        Text(
-                            text = "Right",
-                            fontSize = 40.sp,
-                            color = Color.Red,
-                            fontWeight = FontWeight.Bold,
-
+                        Icon(
+                            imageVector = Icons.Default.Face, // Replace with your desired Material Icon
+                            contentDescription = "Face Icon",
                             modifier = Modifier
                                 .fillMaxSize()
                                 .dragAndDropSource {
@@ -116,19 +105,19 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                                                 transferData = DragAndDropTransferData(
                                                     clipData = ClipData.newPlainText(
                                                         "text",
-                                                        ""
+                                                        "dragged data"
                                                     )
                                                 )
                                             )
                                         }
                                     )
-                                }
+                                },
+                            tint = Color.Red // Optional: Set the color for the icon
                         )
                     }
                 }
             }
         }
-
 
         val pOffset by animateIntOffsetAsState(
             targetValue = when (isPlaying) {
@@ -140,13 +129,13 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
 
         val rtatView by animateFloatAsState(
             targetValue = if (isPlaying) 360f else 0.0f,
-            // Configure the animation duration and easing.
             animationSpec = repeatable(
                 iterations = if (isPlaying) 10 else 1,
                 tween(durationMillis = 3000, easing = LinearEasing),
                 repeatMode = RepeatMode.Restart
             )
         )
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -161,15 +150,6 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                     .size(100.dp, 50.dp)
                     .background(Color.Blue)
             )
-            /*Icon(
-                imageVector = Icons.Default.Face,
-                contentDescription = "Face",
-                modifier = Modifier
-                    .padding(10.dp)
-                    .offset(pOffset.x.dp, pOffset.y.dp)
-                    .rotate(rtatView)
-            )*/
         }
     }
 }
-
