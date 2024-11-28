@@ -55,6 +55,16 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
     var isPlaying by remember { mutableStateOf(true) }
     Column(modifier = Modifier.fillMaxSize()) {
 
+        // Button to toggle rotation
+        androidx.compose.material3.Button(
+            onClick = { isPlaying = !isPlaying },
+            modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally)
+        ) {
+            androidx.compose.material3.Text(
+                text = if (isPlaying) "Stop Rotation" else "Start Rotation"
+            )
+        }
+
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -94,7 +104,7 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                         exit = scaleOut() + fadeOut()
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Face, // Replace with your desired Material Icon
+                            imageVector = Icons.Default.Face,
                             contentDescription = "Face Icon",
                             modifier = Modifier
                                 .fillMaxSize()
@@ -112,7 +122,7 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
                                         }
                                     )
                                 },
-                            tint = Color.Red // Optional: Set the color for the icon
+                            tint = Color.Red
                         )
                     }
                 }
