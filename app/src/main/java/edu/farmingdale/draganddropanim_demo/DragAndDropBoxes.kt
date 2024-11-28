@@ -21,6 +21,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.draganddrop.dragAndDropSource
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -53,18 +54,53 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun DragAndDropBoxes(modifier: Modifier = Modifier) {
     var isPlaying by remember { mutableStateOf(true) }
-    Column(modifier = Modifier.fillMaxSize()) {
+    var pOffset by remember { mutableStateOf(IntOffset(130, 300)) }
 
-        // Button to toggle rotation
-        androidx.compose.material3.Button(
-            onClick = { isPlaying = !isPlaying },
-            modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally)
+    Column(modifier = Modifier.fillMaxSize()) {
+        // Control Buttons (with Reset)
+        Row(
+            horizontalArrangement = Arrangement.SpaceAround,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
         ) {
-            androidx.compose.material3.Text(
-                text = if (isPlaying) "Stop Rotation" else "Start Rotation"
-            )
+            // Up Button
+            androidx.compose.material3.Button(onClick = {
+                pOffset = pOffset.copy(y = pOffset.y - 50)
+            }) {
+                androidx.compose.material3.Text("Up")
+            }
+
+            // Left Button
+            androidx.compose.material3.Button(onClick = {
+                pOffset = pOffset.copy(x = pOffset.x - 50)
+            }) {
+                androidx.compose.material3.Text("Left")
+            }
+
+            // Reset Button
+            androidx.compose.material3.Button(onClick = {
+                pOffset = IntOffset(130, 300)
+            }) {
+                androidx.compose.material3.Text("Reset")
+            }
+
+            // Right Button
+            androidx.compose.material3.Button(onClick = {
+                pOffset = pOffset.copy(x = pOffset.x + 50)
+            }) {
+                androidx.compose.material3.Text("Right")
+            }
+
+            // Down Button
+            androidx.compose.material3.Button(onClick = {
+                pOffset = pOffset.copy(y = pOffset.y + 50)
+            }) {
+                androidx.compose.material3.Text("Down")
+            }
         }
 
+        // Drag and Drop Boxes
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -129,14 +165,7 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
             }
         }
 
-        val pOffset by animateIntOffsetAsState(
-            targetValue = when (isPlaying) {
-                true -> IntOffset(130, 300)
-                false -> IntOffset(130, 100)
-            },
-            animationSpec = tween(3000, easing = LinearEasing)
-        )
-
+        // Animated Rectangle
         val rtatView by animateFloatAsState(
             targetValue = if (isPlaying) 360f else 0.0f,
             animationSpec = repeatable(
@@ -155,7 +184,7 @@ fun DragAndDropBoxes(modifier: Modifier = Modifier) {
             Box(
                 modifier = Modifier
                     .padding(10.dp)
-                    .offset { IntOffset(pOffset.x, pOffset.y) }
+                    .offset { pOffset }
                     .rotate(rtatView)
                     .size(100.dp, 50.dp)
                     .background(Color.Blue)
